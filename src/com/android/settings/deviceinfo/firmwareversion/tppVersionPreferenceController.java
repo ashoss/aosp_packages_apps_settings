@@ -27,8 +27,10 @@ import com.android.settings.core.BasePreferenceController;
 public class tppVersionPreferenceController extends BasePreferenceController {
 
     private static final String TAG = "tppVersionPreferenceController";
-    private static final String ROM_PROPERTY = "ro.custom.showversion";
-    private static final String AOSPB_WEBSITE_URL = "https://github.com/The-Pixel-Project";
+    private static final String DEVICE_PROPERTY = "ro.custom.device";
+    private static final String BUILD_TYPE_PROPERTY = "ro.build.type";
+    private static final String BUILD_INCREMENTAL_PROPERTY = "ro.custom.incremental";
+    private static final String TPP_WEBSITE_URL = "https://github.com/The-Pixel-Project";
 
     public tppVersionPreferenceController(Context context, String key) {
         super(context, key);
@@ -39,21 +41,32 @@ public class tppVersionPreferenceController extends BasePreferenceController {
         return AVAILABLE;
     }
 
-    @Override
-    public CharSequence getSummary() {
-        String rom = SystemProperties.get(ROM_PROPERTY,
-                this.mContext.getString(R.string.device_info_default));
-        return rom;
-    }
+    // @Override
+    // public CharSequence getSummary() {
+    //     String deviceProperty = SystemProperties.get(DEVICE_PROPERTY,
+    //             this.mContext.getString(R.string.device_info_default));
+    //     String buildTypeProperty = SystemProperties.get(BUILD_TYPE_PROPERTY,
+    //             this.mContext.getString(R.string.device_info_default));
+    //     String buildIncrementalProperty = SystemProperties.get(BUILD_INCREMENTAL_PROPERTY,
+    //             this.mContext.getString(R.string.device_info_default));
+    //     String showVersion = deviceProperty + " | " + buildTypeProperty + " | " + buildIncrementalProperty + " | " + dateProperty;
+    //     return showVersion;
+    // }
 
     @Override
     public void updateState(Preference preference) {
         super.updateState(preference);
 
-        // Update the summary on every build
-        String version = SystemProperties.get(ROM_PROPERTY, 
+        String deviceProperty = SystemProperties.get(DEVICE_PROPERTY,
                 this.mContext.getString(R.string.device_info_default));
-        preference.setSummary(version);
+        String buildTypeProperty = SystemProperties.get(BUILD_TYPE_PROPERTY,
+                this.mContext.getString(R.string.device_info_default));
+        String buildIncrementalProperty = SystemProperties.get(BUILD_INCREMENTAL_PROPERTY,
+                this.mContext.getString(R.string.device_info_default));
+
+        String showVersion = deviceProperty + " | " + buildTypeProperty + " | " + buildIncrementalProperty;
+
+        preference.setSummary(showVersion);
 
         // Listener to open the URL
         preference.setOnPreferenceClickListener(pref -> {
